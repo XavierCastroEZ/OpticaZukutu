@@ -6,13 +6,13 @@ import java.sql.SQLException;
 
 public class ConexionDB {
 
-    private static final String URL = "jdbc:sqlserver://DESKTOP-O287UQH:1433;"
+    private static final String URL = "jdbc:sqlserver://optica-zukutu-sql.database.windows.net:1433;"
             + "databaseName=OpticaDB;"
             + "encrypt=true;"
-            + "trustServerCertificate=true;";
+            + "trustServerCertificate=false;";
 
-    private static final String USER = "sa";
-    private static final String PASSWORD = "Mortadela1";
+    private static final String USER = "opticaadmin";
+    private static final String PASSWORD = System.getenv("Mortadela1.-");
 
     private static Connection conexion = null;
 
@@ -22,6 +22,12 @@ public class ConexionDB {
     public static Connection getConexion() {
         try {
             if (conexion == null || conexion.isClosed()) {
+
+                if (PASSWORD == null || PASSWORD.isEmpty()) {
+                    System.err.println("Error: falta la variable DB_PASSWORD.");
+                    return null;
+                }
+
                 Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
 
                 conexion = DriverManager.getConnection(URL, USER, PASSWORD);
